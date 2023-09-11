@@ -7,7 +7,7 @@ import theme from "./styles/theme"
 
 
 
-import { Profile } from './pages/Profile'
+import { New } from './pages/New'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
     <ThemeProvider theme={theme}>
       <GlobalStyle/>
-    < Profile />
+    < New/>
     </ThemeProvider>
   </React.StrictMode>,
 )
