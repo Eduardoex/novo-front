@@ -7,7 +7,7 @@ import theme from "./styles/theme"
 
 
 
-import { New } from './pages/New'
+import {Routes} from './routes'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -15,7 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
     <ThemeProvider theme={theme}>
       <GlobalStyle/>
-    < New/>
+    < Routes/>
     </ThemeProvider>
   </React.StrictMode>,
 )
