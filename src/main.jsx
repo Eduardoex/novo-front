@@ -5,7 +5,7 @@ import GlobalStyle from "./styles/global"
 
 import theme from "./styles/theme"
 
-
+import { MyContext } from './myContext'
 
 import {Routes} from './routes'
 
@@ -15,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 
     <ThemeProvider theme={theme}>
       <GlobalStyle/>
-    < Routes/>
-    </ThemeProvider>
+        <MyContext.Provider value={{ email: "eduardo@gmail.com"}}>
+         < Routes/>
+        </MyContext.Provider>
+      </ThemeProvider>
   </React.StrictMode>,
 )
