@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Header} from "../../components/Header"
 import { Input } from "../../components/Input";
@@ -7,17 +8,62 @@ import { NoteItem } from "../../components/Noteitem";
 import { Section } from "../../components/Section"
 import {Button} from "../../components/Button"
 import { Link } from "react-router-dom";
+import { api } from "../../services/api";
 
 import { Container, Form, } from "./styles";
 
 export function New(){
+    const [title, setTitle] = useState("")
+    const [description, setDescription] = useState("")
 
     const [links, setLinks] = useState([]);
     const [newLink, setNewLink] = useState("")
 
+    const [tags, setTags] = useState([]);
+    const [newTag, setNewTag] = useState("")
+
+    const navigate = useNavigate()
+
     function handleAddLink(){
         setLinks(prevState => [...prevState, newLink])
         setNewLink("")
+    }
+
+    function handleRemoveLink(deleted){
+        setLinks(prevState => prevState.filter(link => link !== deleted))
+    }
+
+    function handleAddTag(){
+        setTags(prevState => [...prevState, newTag])
+        setNewTag("")
+    }
+
+    function handleRemoveTag(deleted){
+        setTags(prevState => prevState.filter(tag => tag !== deleted))
+    }
+
+    
+
+    async function handleNewNote(){
+        if(!title) {
+            return alert("Digite um título para a nota")
+        }
+        if(newTag){
+            return alert("Você deixou uma tag no campo para adicionar, mas não clicou em adicionar")
+        }
+
+        if(newLink){
+            return alert("Você deixou uma tag no campo para adicionar, mas não clicou em adicionar")
+        }
+
+        await api.post("/notes", {
+            title,
+            description,
+            tags,
+            links
+        })
+        alert("Nota criada com sucesso")
+        navigate("/")
     }
 
 
@@ -33,8 +79,14 @@ export function New(){
                         <Link to="/">Voltar</Link>
                     </header>
 
-                    <Input placeholder="Título"/>
-                    <Textarea placeholder="Observações"/>
+                    <Input 
+                    placeholder="Título"
+                    onChange={e => setTitle(e.target.value)}
+                    />
+                    <Textarea 
+                    placeholder="Observações"
+                    onChange={e => setDescription(e.target.value)}
+                    />
 
 
                     <Section title="Links úteis">
@@ -43,27 +95,43 @@ export function New(){
                                 <NoteItem
                                 key={String(index)}
                                 value={link}  
-                                onClick={() => {}}
+                                onClick={() => handleRemoveLink(link)}
                                 />
                             ))
                         }
-                        <NoteItem 
-                        $isNew
-                        placeholder="Novo link"
-                        value={newLink}
-                        onChange={e => setNewLink(e.target.value)}
-                        onClick={handleAddLink}
-                        />
+                                <NoteItem 
+                                $isNew
+                                placeholder="Novo link"
+                                value={newLink}
+                                onChange={e => setNewLink(e.target.value)}
+                                onClick={handleAddLink}
+                                />
                     </Section>
 
                     <Section title="Marcadores">
                         <div className="tags">
-                        <NoteItem value="react"/>
-                        <NoteItem $isNew placeholder="Novo Tag"/>
+                            {
+                                tags.map((tag, index) => (
+                                  <NoteItem 
+                                  key={String(index)}
+                                  value={tag}
+                                  onClick={() => handleRemoveTag(tag) }
+                                  />  
+                                ))
+                        
+                            }
+
+                                <NoteItem 
+                                     $isNew 
+                                     placeholder="Novo Tag"
+                                     onChange={e => setNewTag(e.target.value)}
+                                     value={newTag}
+                                     onClick={handleAddTag}
+                                />
                         </div>
                     </Section>
 
-                    <Button title="Salvar"/>
+                    <Button title="Salvar" onClick={handleNewNote}/>
                 </Form>
             </main>
         </Container>
