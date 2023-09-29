@@ -6,10 +6,11 @@ import { api } from "../../services/api"
 
 import {Container, Form, Avatar} from "./styles"
 import { FiArrowLeft, FiUser, FiMail, FiLock, FiCamera } from "react-icons/fi"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import { Button } from "../../components/Button"
 import { Input } from "../../components/Input"
+
 
 export function Profile() {
     const {user, updateProfile} = useAuth()
@@ -44,12 +45,18 @@ export function Profile() {
 
     }
 
+    const navigate = useNavigate()
+
+    function handleBack(){
+        navigate(-1)
+    }
+
  return (
     <Container>
         <header>
-            <Link to="/">
+            <button type="button" onClick={handleBack}>
                 <FiArrowLeft/>
-            </Link>
+            </button>
         </header>
 
         <Form>
